@@ -66,7 +66,7 @@ public class GameController : MonoBehaviour
             }
             dpad = hori + 2 + ((vert + 1) * 3); //hashes the directions together to make a single number without a ton of if/elses
         }
-        while (dirBuffer.Count > 60)
+        /*while (dirBuffer.Count > 60)
         { //clears inputs past the buffer length, which I've set to 60, should technically be a variable
             dirBuffer.RemoveAt(dirBuffer.Count - 1);
         }
@@ -89,6 +89,8 @@ public class GameController : MonoBehaviour
             {
                 Debug.Log("success returning");
             }
-        }
+        }*/
+        Debug.Log(dpad);
+
     }
 }
