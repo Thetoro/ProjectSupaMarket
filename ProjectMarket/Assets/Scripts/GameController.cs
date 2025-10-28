@@ -10,6 +10,8 @@ public class GameController : MonoBehaviour
 
     public static List<int> dirBuffer = new List<int>();
 
+    private int[] codigo = {2,6,8};
+
     // example inputs being created for some common motions
     inputMotion shoryu = new inputMotion("Shoryuken!").Add(6, 8, true).Add(2, 8, false).Add(6, 12, false);
     private void Awake()
@@ -19,6 +21,7 @@ public class GameController : MonoBehaviour
 
         //ignored because vsync is on, but if vsync were turned off, would fall back to this
         Application.targetFrameRate = 60;
+
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -92,5 +95,19 @@ public class GameController : MonoBehaviour
         }*/
         Debug.Log(dpad);
 
+    }
+
+    private void VerificarInput(int dpad) 
+    {
+        int index = 0;
+
+        if (dpad != 5)
+        {
+            if (dpad == codigo[index])
+            {
+
+            }
+        }
+       
     }
 }
