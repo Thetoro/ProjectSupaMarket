@@ -1,8 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameController : MonoBehaviour
 {
+
+    public InputActionAsset inputActions;
+
+    private InputAction arrowsAction;
+
+    private int index = 0;
+
     // Start is called before the first frame update
     public static int dpad = 5;
     public static int hori = 0;
@@ -14,6 +22,17 @@ public class GameController : MonoBehaviour
 
     // example inputs being created for some common motions
     inputMotion shoryu = new inputMotion("Shoryuken!").Add(6, 8, true).Add(2, 8, false).Add(6, 12, false);
+
+    private void OnEnable()
+    {
+        inputActions.FindActionMap("Player").Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputActions.FindActionMap("Player").Disable();
+    }
+
     private void Awake()
     {
         //sets application to vsync at 60fps
@@ -22,6 +41,7 @@ public class GameController : MonoBehaviour
         //ignored because vsync is on, but if vsync were turned off, would fall back to this
         Application.targetFrameRate = 60;
 
+        arrowsAction = InputSystem.actions.FindAction("Move");
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -94,18 +114,25 @@ public class GameController : MonoBehaviour
             }
         }*/
         Debug.Log(dpad);
-
+        VerificarInput(dpad);
     }
 
     private void VerificarInput(int dpad) 
     {
-        int index = 0;
 
         if (dpad != 5)
         {
             if (dpad == codigo[index])
             {
-
+                Debug.Log("Correct!");
+                if (arrowsAction.WasCompletedThisFrame())
+                {
+                    index++;
+                }
+            }
+            else
+            { 
+                Debug.Log("Wrong!");
             }
         }
        
