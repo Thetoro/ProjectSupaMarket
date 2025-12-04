@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
     public InputActionAsset inputActions;
 
     private InputAction arrowsAction;
+    private InputAction keyAction;
 
     private int index = 0;
 
@@ -43,6 +44,7 @@ public class GameController : MonoBehaviour
         Application.targetFrameRate = 60;
 
         arrowsAction = InputSystem.actions.FindAction("Move");
+        keyAction = InputSystem.actions.FindAction("Interact");
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -89,31 +91,13 @@ public class GameController : MonoBehaviour
                 vert = 1;
             }
             dpad = hori + 2 + ((vert + 1) * 3); //hashes the directions together to make a single number without a ton of if/elses
-        }
-        /*while (dirBuffer.Count > 60)
-        { //clears inputs past the buffer length, which I've set to 60, should technically be a variable
-            dirBuffer.RemoveAt(dirBuffer.Count - 1);
-        }
-        if (Input.GetKeyDown("left") || Input.GetKeyDown("right") || Input.GetKeyDown("up") || Input.GetKeyDown("down") ||
-        Input.GetKeyUp("left") || Input.GetKeyUp("right") || Input.GetKeyUp("up") || Input.GetKeyUp("down"))
-        { //checks if there is any change to directional keys this frame
-            //dirBuffer.Add(dpad);
-            dirBuffer.Insert(0, dpad);
-        }
-        else
-        {
-            //dirBuffer.Add(5); //5 is ignored
-            dirBuffer.Insert(0, 5);
-        }
-
-        //this is the correct way inputs are supposed to be checked
-        if (Input.GetKeyDown("space"))
-        {
-            if (shoryu.checkValidInput())
+            
+            if (keyAction.WasPressedThisFrame())
             {
-                Debug.Log("success returning");
+                dpad = dpad * 0;
             }
-        }*/
+        }
+        
         Debug.Log(dpad);
         VerificarInput(dpad);
     }
@@ -123,10 +107,10 @@ public class GameController : MonoBehaviour
 
         if (dpad != 5)
         {
-            if (dpad == codigo[index] && arrowsAction.WasPressedThisFrame())
+            if (dpad == codigo[index] && (arrowsAction.WasPressedThisFrame() || keyAction.WasPressedThisFrame()))
             {
                 
-                if (index >= codigo.Length)
+                if (index >= codigo.Length - 1)
                 {
                     Debug.Log("SECUENCIA COMPLETA");
                     index = 0; // Reset para siguiente uso
@@ -139,7 +123,7 @@ public class GameController : MonoBehaviour
                 }
 
             }
-            else if(dpad != codigo[index] && arrowsAction.WasPressedThisFrame())
+            else if(dpad != codigo[index] && (arrowsAction.WasPressedThisFrame() || keyAction.WasPressedThisFrame()))
             {
                 Debug.Log("Wrong!");
                 index = 0;
