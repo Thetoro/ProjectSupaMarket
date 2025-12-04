@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Timers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -122,17 +123,26 @@ public class GameController : MonoBehaviour
 
         if (dpad != 5)
         {
-            if (dpad == codigo[index])
+            if (dpad == codigo[index] && arrowsAction.WasPressedThisFrame())
             {
-                Debug.Log("Correct!");
-                if (arrowsAction.WasCompletedThisFrame())
+                
+                if (index >= codigo.Length)
                 {
-                    index++;
+                    Debug.Log("SECUENCIA COMPLETA");
+                    index = 0; // Reset para siguiente uso
+                    return;
                 }
+                index++;
+                if (index < codigo.Length)
+                {
+                    Debug.Log("El numero que sigue es: " + codigo[index]);
+                }
+
             }
-            else
-            { 
+            else if(dpad != codigo[index] && arrowsAction.WasPressedThisFrame())
+            {
                 Debug.Log("Wrong!");
+                index = 0;
             }
         }
        
