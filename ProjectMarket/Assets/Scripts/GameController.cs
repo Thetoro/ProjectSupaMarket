@@ -13,6 +13,9 @@ public class GameController : MonoBehaviour
 
     private int index = 0;
 
+    float actionHeldTime = 0f;
+    float actionThreshold = 1f;
+
     // Start is called before the first frame update
     public static int dpad = 5;
     public static int hori = 0;
@@ -56,6 +59,11 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        // Botón extra (New Input System)
+        bool actionPressedThisFrame = keyAction.WasPressedThisFrame();
+        bool actionHeld = keyAction.IsPressed();
+
         //all of this makes a single directional value out of a bunch of possible inputs, eventually this would be rerouted to rebindable keys
         if (!Input.GetKey("left") && !Input.GetKey("right") && !Input.GetKey("up") && !Input.GetKey("down"))
         {
@@ -92,12 +100,32 @@ public class GameController : MonoBehaviour
             }
             dpad = hori + 2 + ((vert + 1) * 3); //hashes the directions together to make a single number without a ton of if/elses
             
-            if (keyAction.WasPressedThisFrame())
-            {
-                dpad = dpad * 0;
-            }
+            
         }
         
+        //Presionar una sola vez
+        if (actionPressedThisFrame)
+        {
+            dpad = dpad * 0;
+        }
+
+        //Mantener botón
+        if (actionHeld)
+        {
+            actionHeldTime += Time.deltaTime;
+
+            if (actionHeldTime >= actionThreshold)
+            {
+                dpad = 10;    // PRIORIDAD sobre todo lo demás
+                actionHeldTime = 0f;
+            }
+        }
+        else
+        {
+            actionHeldTime = 0f;
+
+        }
+
         Debug.Log(dpad);
         VerificarInput(dpad);
     }
